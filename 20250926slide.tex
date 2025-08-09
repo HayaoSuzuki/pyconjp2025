@@ -83,15 +83,17 @@
 \begin{description}
 \item[Name] Hayao Suzuki（鈴木　駿）
 \item[\xout{Twitter} X] \href{https://twitter.com/CardinalXaro}{@CardinalXaro}
-\item[Work] Software Engineer @ Tokyo Gas
+\item[Work] ソフトウェアエンジニア at 東京ガス株式会社
 \end{description}
 \end{block}
 
-\begin{center}
+\begin{block}{東京ガス株式会社について}
 \begin{itemize}
-\item \structure{絶賛募集中} \url{https://www.tokyo-gas-recruit.com/career/}
+\item 一都六県
+\item 東京ガスはPyCon JP 2025のGoldスポンサーです
+\item ソフトウェアエンジニアを\structure{絶賛募集中} \url{https://www.tokyo-gas-recruit.com/career/}
 \end{itemize}
-\end{center}
+\end{block}
 
 \end{frame}
 
@@ -122,10 +124,33 @@
 \item \structure{Let's implement useless Python objects}(PyCon APAC 2023)
 \item \structure{組み込み関数powの知られざる進化}(PyCon JP 2021)
 \item \structure{インメモリーストリーム活用術}(PyCon JP 2020)
+\item \structure{君はcmathを知っているか}(PyCon mini Shizuoka 2020)
+\item \structure{Pythonと楽しむ初等整数論}(PyCon mini Hiroshima 2019)
 \item \structure{SymPyによる数式処理}(PyCon JP 2018)
 \end{itemize}
 \end{block}
 一覧は \url{https://xaro.hatenablog.jp/} を参照してください
+\end{frame}
+
+\section{graphlibの導入}
+
+\begin{frame}\frametitle{今日のテーマ}
+
+\begin{center}
+\Huge{明日から\structure{graphlib}、みんなで使おう}
+\end{center}
+
+\end{frame}
+
+\begin{frame}\frametitle{グラフって、何？}
+
+\begin{block}{グラフの定義}
+集合$X$の$k$個の要素からなる部分集合全体の族を$\binom{X}{k}$と表す。
+$E \subset \binom{V}{2}$を満たす集合の組$(V, E)$を\structure{グラフ}と呼ぶ。
+このとき、$V=V(G)$を\structure{頂点集合}、$E=E(G)$を\structure{辺集合}と呼ぶ。
+また、$V(G)$の要素をグラフ$G$の\structure{頂点}、$E(G)$の要素を$G$の\structure{辺}と呼ぶ。
+\end{block}
+
 \end{frame}
 
 
