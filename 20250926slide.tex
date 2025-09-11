@@ -49,7 +49,7 @@
  
 \title{明日からgraphlib、みんなで使おう}
 \author[Hayao]{Hayao Suzuki}
-\institute[PyCon JP 2025]{PyCon JP 2025}
+\institute[PyCon JP 2025]{PyCon JP 2025 at 広島国際会議場}
 %\titlegraphic{\includegraphics[scale=0.2]{pyconlogo.png}}
 \date{September 26, 2025}
 
@@ -89,7 +89,7 @@
 
 \begin{block}{東京ガス株式会社について}
 \begin{itemize}
-\item 一都六県
+\item 一都六県に都市ガス・電気などのエネルギーを供給する会社
 \item 東京ガスはPyCon JP 2025のGoldスポンサーです
 \item ソフトウェアエンジニアを\structure{絶賛募集中} \url{https://www.tokyo-gas-recruit.com/career/}
 \end{itemize}
@@ -134,25 +134,51 @@
 
 \section{graphlibの導入}
 
-\begin{frame}\frametitle{今日のテーマ}
+\begin{frame}\frametitle{Today's Theme}
 
 \begin{center}
-\Huge{明日から\structure{graphlib}、みんなで使おう}
+\Huge{明日から\structure{\texttt{graphlib}}、みんなで使おう}
 \end{center}
+
+\end{frame}
+
+\begin{frame}\frametitle{Executive Summary}
+
+\begin{block}{忙しい人向けの要約}
+\begin{itemize}
+\item トポロジカルソートとは、有向非巡回グラフの頂点集合に対する順序付けである
+\item \texttt{graphlib}は、トポロジカルソートが実装された標準ライブラリである
+\item \texttt{graphlib}は、簡易的なタスクランナーとして使える
+\end{itemize}
+\end{block}
 
 \end{frame}
 
 \begin{frame}\frametitle{グラフって、何？}
 
-\begin{block}{グラフの定義}
-集合$X$の$k$個の要素からなる部分集合全体の族を$\binom{X}{k}$と表す。
-$E \subset \binom{V}{2}$を満たす集合の組$(V, E)$を\structure{グラフ}と呼ぶ。
-このとき、$V=V(G)$を\structure{頂点集合}、$E=E(G)$を\structure{辺集合}と呼ぶ。
-また、$V(G)$の要素をグラフ$G$の\structure{頂点}、$E(G)$の要素を$G$の\structure{辺}と呼ぶ。
-\end{block}
+\begin{definition}[有向グラフ]
+有限集合$V$および$V$上の二項関係の部分集合$E$の組$(V, E)$を\structure{有向グラフ}と呼ぶ。
+このとき、$V$を\structure{頂点集合}、$E$を\structure{辺集合}と呼ぶ。
+
+また、$V$の要素をグラフ$G$の\structure{頂点}、$E$の要素を$G$の\structure{辺}と呼ぶ。
+\end{definition}
 
 \end{frame}
 
+\begin{frame}\frametitle{グラフの例}
 
+\begin{center}
+\includegraphics[width=15cm]{dag_example.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}\frametitle{グラフ例おかわり}
+
+\begin{center}
+\includegraphics[width=15cm]{non_dag_example.png}
+\end{center}
+
+\end{frame}
 
 \end{document}
