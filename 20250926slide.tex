@@ -132,7 +132,7 @@
 一覧は \url{https://xaro.hatenablog.jp/} を参照してください
 \end{frame}
 
-\section{graphlibの導入}
+\section{概念の定義}
 
 \begin{frame}\frametitle{Today's Theme}
 
@@ -146,7 +146,7 @@
 
 \begin{block}{忙しい人向けの要約}
 \begin{itemize}
-\item トポロジカルソートとは、有向非巡回グラフの頂点集合に対する順序付けである
+\item トポロジカルソートとは、有向非巡回グラフの頂点集合の線型順序である
 \item \texttt{graphlib}は、トポロジカルソートが実装された標準ライブラリである
 \item \texttt{graphlib}は、簡易的なタスクランナーとして使える
 \end{itemize}
@@ -156,16 +156,30 @@
 
 \begin{frame}\frametitle{グラフって、何？}
 
-\begin{definition}[有向グラフ]
-有限集合$V$および$V$上の二項関係の部分集合$E$の組$(V, E)$を\structure{有向グラフ}と呼ぶ。
-このとき、$V$を\structure{頂点集合}、$E$を\structure{辺集合}と呼ぶ。
-
-また、$V$の要素をグラフ$G$の\structure{頂点}、$E$の要素を$G$の\structure{辺}と呼ぶ。
+\begin{definition}[無向グラフ]
+有限集合$V$および$V\times V$の\structure{非順序対}からなる集合の部分集合$E$の組$G=(V, E)$を\structure{無向グラフ}と呼ぶ。
 \end{definition}
+
+\begin{definition}[有向グラフ]
+有限集合$V$および$V\times V$の\structure{順序対}からなる集合の部分集合$E$の組$G=(V, E)$を\structure{有向グラフ}と呼ぶ。
+\end{definition}
+
+\begin{itemize}
+\item $V$を\structure{頂点集合}、$E$を\structure{辺集合}と呼ぶ。
+\item $V$の要素を$G$の\structure{頂点}、$E$の要素を$G$の\structure{辺}と呼ぶ。
+\end{itemize}
 
 \end{frame}
 
-\begin{frame}\frametitle{グラフの例}
+\begin{frame}\frametitle{無向グラフの例}
+
+\begin{center}
+\includegraphics[width=8cm]{graph.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}\frametitle{有向グラフの例}
 
 \begin{center}
 \includegraphics[width=15cm]{dag_example.png}
@@ -173,12 +187,83 @@
 
 \end{frame}
 
-\begin{frame}\frametitle{グラフ例おかわり}
+\begin{frame}\frametitle{有向グラフの例おかわり}
 
 \begin{center}
 \includegraphics[width=15cm]{non_dag_example.png}
 \end{center}
 
 \end{frame}
+
+\begin{frame}\frametitle{つまり…どういうことだってばよ？}
+
+\begin{center}
+\Huge{…で、その\structure{グラフ}は当社で働くうえで \\ 何のメリットがあるとお考えですか？}
+\end{center}
+
+\end{frame}
+
+\begin{frame}\frametitle{来いよベネット！定義なんか捨ててかかって来い！}
+
+\begin{block}{忙しい人向けのグラフ}
+\begin{itemize}
+\item グラフとは、「もの」とその「関係」を数学的にモデル化したものである
+\item 「もの」は人間、駅、タスク、サーバなど
+\item 「関係」は人間関係、線路、依存関係、ネットワークなど
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}\frametitle{トポロジカルソートって、何？}
+
+\begin{definition}[二項関係]
+集合$A$の直積$A\times A$の部分集合$R$を\structure{二項関係}と呼ぶ。 \\
+また、$(a, b) \in R$を$aRb$と表す。
+\end{definition}
+
+\begin{definition}[半順序関係]
+以下の性質を満たす関係$R$を\structure{半順序関係}と呼ぶ。
+\begin{description}
+\item[反射律] $\forall a \in A$に対して、$aRa$である
+\item[反対称律] $a, b \in A$に対して、$aRb$かつ$bRa$ならば$a=b$である
+\item[推移律] $a, b, c \in A$に対して、$aRb$ かつ $bRc$ならば$aRc$である
+\end{description}
+\end{definition}
+
+\end{frame}
+
+\begin{frame}\frametitle{トポロジカルソートって、何？}
+
+\begin{definition}[線型順序]
+集合$A$の半順序関係$R$において、$\forall a, b \in A$に対して$aRb$または$bRa$が成り立つならば、$R$は\structure{線型順序}であると呼ぶ。
+\end{definition}
+
+\begin{definition}[トポロジカルソート]
+有向グラフ$G=(V, E)$の\structure{トポロジカルソート}とは、$V$の線型順序$(V, \leq)$で、$(u, v) \in E$ならば$u \leq v$を満たすものである。
+\end{definition}
+
+\end{frame}
+
+\begin{frame}\frametitle{つまり…どういうことだってばよ？（2回目）}
+
+\begin{center}
+\Huge{…で、その\structure{トポロジカルソート}は（ｒｙ}
+\end{center}
+
+\end{frame}
+
+\begin{frame}\frametitle{来いよベネット！定義なんか捨てて（ｒｙ}
+
+\begin{block}{忙しい人向けのトポロジカルソート}
+\begin{itemize}
+\item 半順序関係は、大小関係や包含関係を抽象化したもの
+\item 線型順序は、どれでも比較できるやつ、ぐらいの理解で
+\item トポロジカルソートは、有向グラフの頂点をいい感じに順序付けしたもの
+\end{itemize}
+\end{block}
+
+\end{frame}
+
 
 \end{document}
