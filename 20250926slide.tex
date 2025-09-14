@@ -49,7 +49,7 @@
  
 \title{明日からgraphlib、みんなで使おう}
 \author[Hayao]{Hayao Suzuki}
-\institute[PyCon JP 2025]{PyCon JP 2025 at 広島国際会議場}
+\institute[PyCon JP 2025]{PyCon JP 2025 at International Conference Center Hiroshima}
 %\titlegraphic{\includegraphics[scale=0.2]{pyconlogo.png}}
 \date{September 26, 2025}
 
@@ -75,7 +75,7 @@
 
 \end{frame}
 
-\section{Introduction}
+\section{自己紹介}
 
 \begin{frame}\frametitle{Who am I ?}
 
@@ -134,6 +134,8 @@
 
 \section{概念の定義}
 
+\subsection{導入}
+
 \begin{frame}\frametitle{Today's Theme}
 
 \begin{center}
@@ -153,6 +155,8 @@
 \end{block}
 
 \end{frame}
+
+\subsection{グラフの定義}
 
 \begin{frame}\frametitle{グラフって、何？}
 
@@ -187,13 +191,13 @@
 
 \end{frame}
 
-\begin{frame}\frametitle{有向グラフの例おかわり}
-
-\begin{center}
-\includegraphics[width=15cm]{non_dag_example.png}
-\end{center}
-
-\end{frame}
+%\begin{frame}\frametitle{有向グラフの例おかわり}
+%
+%\begin{center}
+%\includegraphics[width=15cm]{non_dag_example.png}
+%\end{center}
+%
+%\end{frame}
 
 \begin{frame}\frametitle{つまり…どういうことだってばよ？}
 
@@ -215,6 +219,8 @@
 
 \end{frame}
 
+\subsection{トポロジカルソートの定義}
+
 \begin{frame}\frametitle{トポロジカルソートって、何？}
 
 \begin{definition}[二項関係]
@@ -230,7 +236,7 @@
 \item[推移律] $a, b, c \in A$に対して、$aRb$ かつ $bRc$ならば$aRc$である
 \end{description}
 \end{definition}
-
+半順序関係は、大小関係や比較の概念を抽象したもの。
 \end{frame}
 
 \begin{frame}\frametitle{トポロジカルソートって、何？}
@@ -245,23 +251,129 @@
 
 \end{frame}
 
-\begin{frame}\frametitle{つまり…どういうことだってばよ？（2回目）}
+\begin{frame}\frametitle{トポロジカルソートって、何？}
+
+\begin{definition}[歩道]
+グラフ$G=(V, E)$の頂点$u_{1}$から$u_{k}$への長さ$k$の\structure{歩道}$W$とは、頂点の列$(u_{1}, u_{2}, \dots, u_{k})$で、$(u_{i}, u_{j}) \in E (1 \leq i < j \leq k)$を満たすものである。特に、$u_{1}=u_{k}$の場合、$W$\structure{閉じている}と呼ぶ。
+\end{definition}
+
+\begin{definition}[道]
+グラフ$G=(V, E)$の歩道$W$において、頂点および辺がすべて異なるものは\structure{道}と呼ぶ。
+特に、閉じた道を\structure{閉路}と言う。
+\end{definition}
+
+\begin{definition}[有向非巡回グラフ]
+有向グラフ$G=(V, E)$において、閉路を含まないものを\structure{有向非巡回グラフ}と呼ぶ。
+\end{definition}
+
+\end{frame}
+
+\begin{frame}\frametitle{トポロジカルソートって、何？}
+
+\begin{proposition}[トポロジカルソート可能]
+有向グラフ$G$が\structure{トポロジカルソート可能}であるための必要十分条件は、\\ 有向グラフ$G$が\structure{有向非巡回グラフ}であることである。
+\end{proposition}
+
+\end{frame}
+
+\begin{frame}\frametitle{楽しい証明コーナー}
+
+\begin{proof}[トポロジカルソート可能 $\Rightarrow$ 有向非巡回グラフ]
+トポロジカルソート可能だがグラフ$G$に閉路が存在すると仮定する。 \\
+その閉路を$v_{i}, v_{j}, v_{k}(i < j < k)$として、かつ$ v_{i} \leq v_{j} \leq v_{k}$とする。
+$v_{i}, v_{j}, v_{k}(i < j < k)$は閉路なので、$v_{k}$から$v_{i}$への辺が存在する。 \\
+つまり、$v_{k} \leq v_{i}$となるが、それは仮定$ v_{i} \leq v_{j} \leq v_{k}$に矛盾する。
+\end{proof}
+
+\end{frame}
+
+\begin{frame}\frametitle{まだまだ続くぞ楽しい証明コーナー}
+
+\begin{lemma}
+有向非巡回グラフには入次数0の頂点が必ず存在する。
+\end{lemma}
+
+\begin{proof}[証明]
+有向非巡回グラフの最長の道$v_{1}, \dots, v_{k}$を1つ選ぶ。
+$v_{1}$に入る辺が存在するならば、$u, v_{1}, \dots, v_{k}$かつ$(u, v_{1}) \in E$のような頂点$u$が存在することになるが、$v_{1}, \dots, v_{k}$が最長の道であるという仮定に反する。
+よって、$v_{1}$の入次数は0となり、有向非巡回グラフには入次数0の頂点が必ず存在する。
+\end{proof}
+
+\end{frame}
+
+\begin{frame}\frametitle{え？まだあるんですか？楽しい証明コーナー}
+
+\begin{lemma}
+有向非巡回グラフ$G$から入次数0の頂点およびそこから出る辺を取り除いた部分グラフ$H$もまた有向非巡回グラフである。
+\end{lemma}
+
+\begin{proof}[証明]
+部分グラフ$H$が有向非巡回グラフではないと仮定する。
+$H$の閉路を$C$とした場合、$H$の構成方法から$C$には取り除いた入次数0の頂点およびそこから出る辺は含まれない。
+つまり、$H$は$G$の部分グラフなので、閉路$C$は$G$にも存在することになる。
+しかし、それは$G$が有向非巡回グラフであるという仮定に反する。
+\end{proof}
+
+\end{frame}
+
+\begin{frame}\frametitle{楽しいよな！証明コーナー}
+
+\begin{proof}[有向非巡回グラフ $\Rightarrow$ トポロジカルソート可能]
+有向非巡回グラフ$G$には必ず入次数0の頂点が必ず存在するので、その頂点およびそこから出る辺を取り除く。
+取り除いたグラフもまた有向非巡回グラフなので、頂点がなくなるまでそれを繰り返す。
+取り除いた順番に頂点を並べたものがトポロジカルソートである。
+\end{proof}
+\structure{重要}：証明がアルゴリズムになっていることに注意。
+
+\end{frame}
+
+\begin{frame}\frametitle{今日はPyCon JP 2025の1日目です}
 
 \begin{center}
-\Huge{…で、その\structure{トポロジカルソート}は（ｒｙ}
+\Huge{離散数学の講義ではなく、 \\ PyCon JPですよ}
 \end{center}
 
 \end{frame}
 
-\begin{frame}\frametitle{来いよベネット！定義なんか捨てて（ｒｙ}
+\begin{frame}\frametitle{来いよベネット！証明なんか捨てて（ｒｙ}
 
 \begin{block}{忙しい人向けのトポロジカルソート}
 \begin{itemize}
 \item 半順序関係は、大小関係や包含関係を抽象化したもの
 \item 線型順序は、どれでも比較できるやつ、ぐらいの理解で
 \item トポロジカルソートは、有向グラフの頂点をいい感じに順序付けしたもの
+\item トポロジカルソートと有向非巡回グラフは表裏一体
+\item トポロジカルソートに関する証明がアルゴリズムになっている
 \end{itemize}
 \end{block}
+
+\end{frame}
+
+\section{実用例}
+
+\begin{frame}\frametitle{トポロジカルソートの使い道とは}
+
+\begin{exampleblock}{Q: 頂点をタスク、辺をタスクの依存関係とする。 \\ どの順番でタスクを実行すればよいか？}
+\begin{center}
+\includegraphics[width=8cm]{complex_dag_example.png}
+\end{center}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}\frametitle{トポロジカルソートの使い道とは}
+
+\begin{block}{Ans: グラフをトポロジカルソートして、その順番にやればよい。}
+A→B→D→E→C→G→F→I→M→H→J→K→L→N
+\end{block}
+
+\end{frame}
+
+\begin{frame}\frametitle{どうやったの？}
+
+\begin{center}
+\Huge{明日から\structure{graphlib}、みんなで使おう}
+\end{center}
 
 \end{frame}
 
