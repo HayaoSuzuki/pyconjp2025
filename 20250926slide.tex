@@ -372,10 +372,142 @@ A→B→D→E→C→G→F→I→M→H→J→K→L→N
 \begin{frame}\frametitle{どうやったの？}
 
 \begin{center}
-\Huge{明日から\structure{graphlib}、みんなで使おう}
+\Huge{すでに\structure{graphlib}、僕は使ったよ}
 \end{center}
 
 \end{frame}
 
+\begin{frame}\frametitle{真打登場}
+
+\begin{block}{\texttt{graphlib}：グラフ構造を操作する機能}
+\begin{itemize}
+\item 現在は\texttt{TopologicalSorter}のみ、単純な標準ライブラリ
+\item Python 3.9で追加
+\item \url{https://github.com/python/cpython/issues/61207}で議論されていた。
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\texttt{graphlib}の使い方}
+\begin{exampleblock}{トポロジカルソートの実行}
+\begin{pyverbatim}
+from graphlib import TopologicalSorter
+
+graph = {
+    "D": {"B", "C"}, 
+    "C": {"A"},
+    "B": {"A"},
+}
+order = TopologicalSorter(graph).static_order()
+print(f"Topological order: {" → ".join(order)}")
+# A → C → B → D
+\end{pyverbatim}
+\end{exampleblock}
+D$\leftarrow$B, D$\leftarrow$Cのようなイメージで定義する。
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\texttt{graphlib}の使い方}
+\begin{alertblock}{有向非巡回グラフではないケース}
+\begin{pyverbatim}
+from graphlib import TopologicalSorter
+
+graph = {
+    "A": {"C"},
+    "B": {"A"},
+    "C": {"B"}
+}
+order = TopologicalSorter(graph).static_order()
+print(f"Topological order: {" → ".join(order)}")
+# graphlib.CycleErrorが発生する
+\end{pyverbatim}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}\frametitle{より高度な使い方}
+
+\begin{block}{\texttt{graphlib}：依存関係のあるタスクを実行するタスクランナー}
+\begin{itemize}
+\item 並列実行しやすいアルゴリズム
+\item ドキュメントにそれとなく触れられているが、不十分...。
+\item 生成AIの力を借りてそれとなく作ってみよう！
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{タスクの定義}
+\begin{block}{\texttt{dataclass}によるタスク定義}
+\begin{pyverbatim}
+@dataclass(frozen=True, slots=True)
+class Task:
+    name: str
+    action: Action
+    deps: set[str] = field(default_factory=set)
+\end{pyverbatim}
+\end{block}
+頂点はハッシュ可能である必要があるので、\texttt{frozen=True}を使う。
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{タスクランナー}
+\begin{block}{グラフの定義}
+\begin{pyverbatim}
+def run(tasks, max_workers=None):
+    by_name = {t.name: t for t in tasks}
+    ts = TopologicalSorter({t.name: set(t.deps) for t in tasks})
+    ts.prepare()
+    results: dict[str, object] = {}
+    ...
+\end{pyverbatim}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{タスクランナー}
+\begin{block}{並行処理：スレッドに投入}
+\begin{pyverbatim}
+def run(tasks, max_workers=None):
+    ...
+    with ThreadPoolExecutor(max_workers) as pool:
+        while ts.is_active():
+            ready = ts.get_ready()
+            futs = {}
+            for name in ready:
+                print(f"run  {name}")
+                futs[pool.submit(by_name[name].action)] = name
+                ...
+\end{pyverbatim}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{タスクランナー}
+\begin{block}{並行処理：完了待ち}
+\begin{pyverbatim}
+def run(tasks, max_workers=None):
+    ...
+    with ThreadPoolExecutor(max_workers) as pool:
+        while ts.is_active():
+            ...
+            for fut in as_completed(futs):
+                name = futs[fut]
+                results[name] = fut.result()
+                print(f"done {name}")
+                ts.done(name)
+    return results
+\end{pyverbatim}
+\end{block}
+\end{frame}
+
+\begin{frame}\frametitle{まとめ}
+
+\begin{block}{まとめ}
+\begin{itemize}
+\item トポロジカルソートとは、有向非巡回グラフの頂点集合の線型順序である。
+\item 有向グラフ$G$が\structure{トポロジカルソート可能}であるための必要十分条件は、\\ 有向グラフ$G$が\structure{有向非巡回グラフ}であることである。
+\item \texttt{graphlib}は、トポロジカルソートが実装された標準ライブラリである。
+\item \texttt{graphlib}は、簡易的なタスクランナーを実装する際に、実行順序を決定する仕組みとして使える。
+\end{itemize}
+\end{block}
+
+\end{frame}
 
 \end{document}

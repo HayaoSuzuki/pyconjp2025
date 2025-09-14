@@ -1,0 +1,8 @@
+[project]
+name = "pyconjp2025"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "pygments>=2.19.2",
+]
